@@ -29,14 +29,22 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               controller: serchController,
-              onChanged: (value) {
-                setState(() {});
-              },
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.symmetric(horizontal: 20),
                   hintText: 'Search with Country Name',
+                  suffixIcon: serchController.text.isEmpty
+                      ? const Icon(Icons.search)
+                      : GestureDetector(
+                          onTap: () {
+                            serchController.text = "";
+                            setState(() {});
+                          },
+                          child: Icon(Icons.clear)),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50))),
+              onChanged: (value) {
+                setState(() {});
+              },
             ),
           ),
           Expanded(
@@ -48,6 +56,9 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                     itemCount: 4,
                     itemBuilder: (context, index) {
                       return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade700,
+                        highlightColor: Colors.grey.shade100,
+                        enabled: true,
                         child: Column(
                           children: [
                             ListTile(
@@ -69,8 +80,6 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                             )
                           ],
                         ),
-                        baseColor: Colors.grey.shade700,
-                        highlightColor: Colors.grey.shade100,
                       );
                     });
               } else {
@@ -91,7 +100,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                                                   ['country'],
                                               image: snapshot.data![index]
                                                   ['countryInfo']['flag'],
-                                              totalCase: snapshot.data![index]
+                                              totalCases: snapshot.data![index]
                                                   ['cases'],
                                               totalRecovered: snapshot
                                                   .data![index]['recovered'],
@@ -104,7 +113,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                                                       ['todayRecovered'],
                                               test: snapshot.data![index]
                                                   ['tests'],
-                                              death: snapshot.data![index]
+                                              totalDeaths: snapshot.data![index]
                                                   ['deaths'],
                                             )));
                               },
@@ -118,7 +127,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                                     image: NetworkImage(snapshot.data![index]
                                         ['countryInfo']['flag'])),
                               ),
-                            )
+                            ),
                           ],
                         );
                       } else if (name
@@ -136,7 +145,7 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                                                   ['country'],
                                               image: snapshot.data![index]
                                                   ['countryInfo']['flag'],
-                                              totalCase: snapshot.data![index]
+                                              totalCases: snapshot.data![index]
                                                   ['cases'],
                                               totalRecovered: snapshot
                                                   .data![index]['recovered'],
@@ -149,20 +158,20 @@ class _CountriesListScreenState extends State<CountriesListScreen> {
                                                       ['todayRecovered'],
                                               test: snapshot.data![index]
                                                   ['tests'],
-                                              death: snapshot.data![index]
+                                              totalDeaths: snapshot.data![index]
                                                   ['deaths'],
                                             )));
                               },
-                            ),
-                            ListTile(
-                              title: Text(snapshot.data![index]['country']),
-                              subtitle: Text(
-                                  snapshot.data![index]['cases'].toString()),
-                              leading: Image(
-                                  height: 50,
-                                  width: 50,
-                                  image: NetworkImage(snapshot.data![index]
-                                      ['countryInfo']['flag'])),
+                              child: ListTile(
+                                title: Text(snapshot.data![index]['country']),
+                                subtitle: Text(
+                                    snapshot.data![index]['cases'].toString()),
+                                leading: Image(
+                                    height: 50,
+                                    width: 50,
+                                    image: NetworkImage(snapshot.data![index]
+                                        ['countryInfo']['flag'])),
+                              ),
                             )
                           ],
                         );
